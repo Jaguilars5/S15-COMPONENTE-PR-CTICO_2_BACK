@@ -5,7 +5,8 @@ export const JWT_CONFIG = {
 
 export const ROLES = {
   FARMER: "FARMER",
-  BRAND: "BRAND"
+  BRAND: "BRAND",
+  CUSTOMER: "CUSTOMER"
 } as const;
 
 export const STATUS = {

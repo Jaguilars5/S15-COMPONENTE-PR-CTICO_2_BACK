@@ -7,7 +7,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: "FARMER" | "BRAND";
+  role: "FARMER" | "BRAND" | "CUSTOMER";
   createdAt: Date;
   updatedAt: Date;
   comparePassword(password: string): Promise<boolean>;

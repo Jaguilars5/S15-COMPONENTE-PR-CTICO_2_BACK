@@ -1,6 +1,14 @@
 # Backend de la Tienda de Café
 
-Este servicio gestiona la autenticación, administración de productos, transacciones de agricultores y tendencias de precios.
+Este servicio gestiona la autenticación, administración de productos (inventarios), transacciones de agricultores y tendencias de precios.
+
+## Nuevas Adiciones a la API
+1. **Endpoint de Checkout (`POST /api/products/buy`):**
+   - Recibe un listado de productos y cantidades en el body: `{ items: [{ productId, quantity }] }`.
+   - Valida la disponibilidad de stock, realiza la compra disminuyendo el stock en la base de datos MongoDB y responde con éxito.
+2. **Rol Cliente (`CUSTOMER`):**
+   - Habilitado como rol válido para registro y autenticación.
+   - Autorizado para interactuar con consultas de productos y realizar compras a través de la API de checkout.
 
 ## Tecnologías Utilizadas
 
@@ -13,12 +21,12 @@ Este servicio gestiona la autenticación, administración de productos, transacc
 
 ## Estructura de Directorios
 
-- `src/config`: Configuraciones de conexión, inicializadores y constantes
-- `src/controllers`: Capa de controladores para peticiones HTTP
-- `src/graphql`: Esquema typeDefs y resolvers para GraphQL
-- `src/middleware`: Middleware de autorización y autenticación
-- `src/models`: Esquemas de datos para Mongoose
-- `src/routes`: Rutas REST de Express
+- `src/config`: Configuraciones de conexión, inicializadores (seed) y constantes (roles y mensajes)
+- `src/controllers`: Capa de controladores para peticiones HTTP (autenticación, productos y compras)
+- `src/graphql`: Esquema typeDefs y resolvers para GraphQL (utilizado para tendencias de mercado y métricas de marca)
+- `src/middleware`: Middleware de autorización de roles y autenticación JWT
+- `src/models`: Esquemas de datos para Mongoose (User, Product, CoffeeBatch, PriceTrend)
+- `src/routes`: Rutas REST de Express (Auth, Coffee, Products)
 - `src/services`: Capa de lógica de negocio y operaciones de base de datos
 - `src/server.ts`: Punto de inicio del servidor
 
@@ -28,7 +36,9 @@ Este servicio gestiona la autenticación, administración de productos, transacc
 npm install
 ```
 
-## Inicializar Base de Datos
+## Inicializar Base de Datos (Seeding)
+
+Puebla la base de datos local de MongoDB con agricultores, operadores de marca, lotes y productos iniciales:
 
 ```bash
 npm run seed
@@ -44,5 +54,4 @@ npm run dev
 
 ```bash
 npm run build
-npm start
 ```

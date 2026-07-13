@@ -72,4 +72,37 @@ export class ProductController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  public static async buyProducts(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { items } = req.body;
+      if (!items || !Array.isArray(items) || items.length === 0) {
+        res.status(400).json({ error: "Debe proporcionar una lista de productos para comprar" });
+        return;
+      }
+
+      const productsToUpdate = [];
+      for (const item of items) {
+        const product = await ProductService.getProductById(item.productId);
+        if (!product) {
+          res.status(404).json({ error: `Producto no encontrado` });
+          return;
+        }
+        if (product.stock < item.quantity) {
+          res.status(400).json({ error: `Stock insuficiente para ${product.name}. Disponible: ${product.stock}` });
+          return;
+        }
+        productsToUpdate.push({ product, quantity: item.quantity });
+      }
+
+      for (const { product, quantity } of productsToUpdate) {
+        product.stock -= quantity;
+        await product.save();
+      }
+
+      res.status(200).json({ message: "Compra realizada con éxito" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }

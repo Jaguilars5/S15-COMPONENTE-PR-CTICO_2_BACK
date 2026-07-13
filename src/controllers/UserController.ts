@@ -10,7 +10,7 @@ export class UserController {
         res.status(400).json({ error: ERRORS.FIELDS_REQUIRED });
         return;
       }
-      if (role !== ROLES.FARMER && role !== ROLES.BRAND) {
+      if (role !== ROLES.FARMER && role !== ROLES.BRAND && role !== ROLES.CUSTOMER) {
         res.status(400).json({ error: ERRORS.INVALID_ROLE });
         return;
       }

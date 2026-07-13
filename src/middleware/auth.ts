@@ -5,7 +5,7 @@ import { ERRORS } from "../config/constants";
 export interface AuthRequest extends Request {
   user?: {
     userId: string;
-    role: "FARMER" | "BRAND";
+    role: "FARMER" | "BRAND" | "CUSTOMER";
   };
 }
 
@@ -19,7 +19,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecretkeyforcoffeeshopmvp12345") as {
       userId: string;
-      role: "FARMER" | "BRAND";
+      role: "FARMER" | "BRAND" | "CUSTOMER";
     };
     req.user = decoded;
     next();
@@ -28,7 +28,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   }
 };
 
-export const requireRole = (role: "FARMER" | "BRAND") => {
+export const requireRole = (role: "FARMER" | "BRAND" | "CUSTOMER") => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || req.user.role !== role) {
       res.status(403).json({ error: ERRORS.UNAUTHORIZED_ROLE });
